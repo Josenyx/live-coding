@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaTech Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container">
+            <a class="navbar-brand logo" href="#">NovaTech</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link nav-hover" href="#" data-lang="nav_products">Productos</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link nav-hover" href="#" data-lang="nav_offers">Ofertas</a></li>
+                    <li class="nav-item"><a class="nav-link nav-hover" href="#"
+                            data-lang="nav_components">Componentes</a></li>
+                </ul>
+
+                <div class="d-flex gap-3 align-items-center">
+                    <select id="language" class="form-select form-select-sm" style="width: auto;">
+                        <option value="es">ES</option>
+                        <option value="en">EN</option>
+                    </select>
+                    <a href="#" class="btn btn-login" id="navLoginBtn" data-lang="nav_login">Login</a>
+
+                    <!-- ICONO CARRITO (solo visible logueado) -->
+                    <button id="cartBtn" class="cart-btn d-none" title="Ver carrito">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#6ee7ff"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                        </svg>
+                        <span id="cart-badge" class="cart-badge d-none">0</span>
+                    </button>
+
+                    <!-- USUARIO LOGUEADO -->
+                    <div id="user-info" class="d-none d-flex gap-2 align-items-center">
+                        <div class="d-flex align-items-center gap-2 px-3 py-1 rounded"
+                            style="background: rgba(110,231,255,0.12); border: 1px solid rgba(110,231,255,0.3);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#6ee7ff"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                            </svg>
+                            <span id="user-email" class="text-white"
+                                style="font-size: 0.85rem; font-weight: 600; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                        </div>
+                        <a href="#" class="btn btn-sm" id="navLogoutBtn"
+                            style="background: rgba(255,60,60,0.15); color: #ff6b6b; border: 1px solid rgba(255,60,60,0.4); font-size: 0.8rem;"
+                            data-lang="nav_logout">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container text-center">
+            <h1 data-lang="hero_title">Tecnología para Gamers</h1>
+            <p data-lang="hero_subtitle">Los mejores componentes y gadgets</p>
+        </div>
+    </section>
+
+    <!-- PRODUCTOS -->
+    <div class="container mt-5">
+        <h2 class="section-title" data-lang="catalog_title">Catálogo</h2>
+        <div id="product-list" class="row"></div>
+    </div>
+
+    <!-- TOASTS -->
+    <div id="toast-container"></div>
+
+    <!-- MODAL LOGIN -->
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 data-lang="login_title">Iniciar Sesión</h3>
+            <div id="login-error" class="alert alert-danger d-none" role="alert"
+                style="font-size: 0.9rem; padding: 10px;"></div>
+            <form id="loginFormModal">
+                <div class="mb-3">
+                    <label data-lang="email_label">Email</label>
+                    <input type="email" class="form-control" id="modalEmail" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="mb-3">
+                    <label data-lang="password_label">Contraseña</label>
+                    <input type="password" class="form-control" id="modalPassword" placeholder="Ej: Password123"
+                        required>
+                </div>
+                <button type="submit" class="btn btn-login w-100" data-lang="login_btn">Entrar</button>
+            </form>
+            <div class="text-center mt-3">
+                <p class="mb-2" style="font-size: 0.9rem;">
+                    <span data-lang="no_account">¿No tienes cuenta?</span>
+                    <a href="#" id="showRegisterModal" style="color: #6ee7ff; text-decoration: none; font-weight: bold;"
+                        data-lang="register_here">Regístrate aquí</a>
+                </p>
+            </div>
+            <button id="closeModal" class="btn btn-outline-light mt-2 w-100" data-lang="close_btn">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- MODAL REGISTRO -->
+    <div id="register-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 data-lang="register_title">Registro</h3>
+            <div id="register-error" class="alert alert-danger d-none" role="alert"
+                style="font-size: 0.9rem; padding: 10px;"></div>
+            <form id="registerFormModal">
+                <div class="mb-3">
+                    <label data-lang="email_label">Email</label>
+                    <input type="email" class="form-control" id="registerEmail" placeholder="ejemplo@correo.com"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label data-lang="password_label">Contraseña</label>
+                    <input type="password" class="form-control" id="registerPassword"
+                        placeholder="Ej: Password123 (Min 8 caract.)" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                        title="Debe contener al menos un número, una mayúscula, una minúscula y 8 o más caracteres"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label data-lang="confirm_password_label">Repetir Contraseña</label>
+                    <input type="password" class="form-control" id="registerConfirmPassword"
+                        placeholder="Repite tu contraseña" required>
+                </div>
+                <button type="submit" class="btn btn-register w-100" data-lang="register_btn">Registrarse</button>
+            </form>
+            <div class="text-center mt-3">
+                <p class="mb-2" style="font-size: 0.9rem;">
+                    <span data-lang="has_account">¿Ya tienes cuenta?</span>
+                    <a href="#" id="showLoginModal" style="color: #6ee7ff; text-decoration: none; font-weight: bold;"
+                        data-lang="login_here">Inicia sesión aquí</a>
+                </p>
+            </div>
+            <button id="closeRegisterModal" class="btn btn-outline-light mt-2 w-100"
+                data-lang="close_btn">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- PANEL CARRITO (side drawer) -->
+    <div id="cart-drawer-overlay" class="cart-overlay"></div>
+    <div id="cart-drawer" class="cart-drawer">
+        <!-- CABECERA -->
+        <div class="cart-drawer-header">
+            <h2 data-lang="cart_title">🛒 Tu carrito de compra</h2>
+            <button id="closeCartDrawer" class="cart-close-btn">&times;</button>
+        </div>
+
+        <!-- LISTA DE PRODUCTOS -->
+        <div class="cart-drawer-body">
+            <div id="cart-items-list"></div>
+        </div>
+
+        <!-- PIE: descuento, pago, total -->
+        <div class="cart-drawer-footer">
+
+            <!-- RESUMEN -->
+            <div class="cart-summary">
+                <div class="cart-summary-row">
+                    <span data-lang="cart_products">Productos</span>
+                    <span id="cart-count">0</span>
+                </div>
+                <div class="cart-summary-row cart-summary-total">
+                    <span data-lang="cart_total">Total</span>
+                    <span><span id="cart-total">0.00</span> €</span>
+                </div>
+            </div>
+
+            <!-- DESCUENTO -->
+            <div class="cart-section">
+                <label class="cart-section-label" data-lang="discount_label">Código de descuento</label>
+                <div class="d-flex gap-2">
+                    <input type="text" id="discount-code" class="form-control" placeholder="XXXX-XXXX-XXXX"
+                        maxlength="14"
+                        style="background:#1b1b1b; color:white; border-color:#333; letter-spacing:0.08em; text-transform:uppercase;">
+                    <button id="applyDiscount" class="btn" style="background:#a855f7; color:white; white-space:nowrap;"
+                        data-lang="apply_btn">Aplicar</button>
+                </div>
+                <p id="discount-msg" class="cart-discount-msg d-none"></p>
+            </div>
+
+            <!-- MÉTODO DE PAGO -->
+            <div class="cart-section">
+                <label class="cart-section-label" data-lang="payment_method">Método de pago</label>
+                <div class="payment-options">
+                    <label class="payment-option" id="pay-card">
+                        <input type="radio" name="payment" value="card" checked>
+                        <span class="payment-icon">💳</span>
+                        <span data-lang="pay_card">Tarjeta de crédito</span>
+                    </label>
+                    <label class="payment-option" id="pay-paypal">
+                        <input type="radio" name="payment" value="paypal">
+                        <span class="payment-icon">🌐</span>
+                        <span data-lang="pay_paypal">PayPal</span>
+                    </label>
+                    <label class="payment-option" id="pay-crypto">
+                        <input type="radio" name="payment" value="crypto">
+                        <span class="payment-icon">₿</span>
+                        <span data-lang="pay_crypto">Crypto</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- BOTÓN PROCEDER AL PAGO -->
+            <button id="checkoutBtn" class="btn w-100"
+                style="background: linear-gradient(90deg,#a855f7,#6ee7ff); color:#000; font-weight:bold; font-size:1rem; padding:14px; border:none;"
+                data-lang="checkout_btn">Proceder
+                al pago →</button>
+        </div>
+    </div>
+
+    <!-- MODAL DATOS DE ENVÍO -->
+    <div id="shipping-modal" class="modal-overlay" style="z-index: 13000;">
+        <div class="modal-content" style="width: 460px; max-width: 96%;">
+            <h3 style="color:#6ee7ff; text-align:center;" data-lang="shipping_title">📦 Datos de envío</h3>
+            <p style="color:#aaa; font-size:0.85rem; text-align:center; margin-bottom:18px;" data-lang="shipping_sub">
+                Completa tu dirección para finalizar el pedido</p>
+            <form id="shippingForm">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <label class="form-label" style="color:#ccc; font-size:0.85rem;"
+                            data-lang="name_label">Nombre</label>
+                        <input type="text" class="form-control" id="sh-nombre" placeholder="Ej: Carlos" required
+                            style="background:#1b1b1b; color:white; border-color:#333;">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label" style="color:#ccc; font-size:0.85rem;"
+                            data-lang="lastname_label">Apellidos</label>
+                        <input type="text" class="form-control" id="sh-apellidos" placeholder="Ej: García López"
+                            required style="background:#1b1b1b; color:white; border-color:#333;">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" style="color:#ccc; font-size:0.85rem;"
+                            data-lang="address_label">Dirección</label>
+                        <input type="text" class="form-control" id="sh-direccion" placeholder="Ej: Calle Mayor 12, 3ºB"
+                            required style="background:#1b1b1b; color:white; border-color:#333;">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label" style="color:#ccc; font-size:0.85rem;"
+                            data-lang="city_label">Ciudad</label>
+                        <input type="text" class="form-control" id="sh-ciudad" placeholder="Ej: Madrid" required
+                            style="background:#1b1b1b; color:white; border-color:#333;">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label" style="color:#ccc; font-size:0.85rem;"
+                            data-lang="province_label">Provincia</label>
+                        <input type="text" class="form-control" id="sh-provincia" placeholder="Ej: Madrid" required
+                            style="background:#1b1b1b; color:white; border-color:#333;">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" style="color:#ccc; font-size:0.85rem;"
+                            data-lang="country_label">País</label>
+                        <input type="text" class="form-control" id="sh-pais" placeholder="Ej: España" required
+                            style="background:#1b1b1b; color:white; border-color:#333;">
+                    </div>
+                </div>
+                <div id="shipping-error" class="alert alert-danger d-none mt-3" style="font-size:0.85rem; padding:8px;">
+                </div>
+                <button type="submit" class="btn w-100 mt-4"
+                    style="background: linear-gradient(90deg,#a855f7,#6ee7ff); color:#000; font-weight:bold; font-size:1rem; padding:12px; border:none;"
+                    data-lang="confirm_order_btn">✅
+                    Confirmar pedido</button>
+            </form>
+            <button id="closeShippingModal" class="btn btn-outline-light mt-2 w-100"
+                data-lang="cancel_btn">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Cargar language.js PRIMERO para tener t() disponible -->
+    <script src="js/language.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/auth.js"></script>
+
+</body>
+
+</html>
